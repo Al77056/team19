@@ -70,10 +70,8 @@ class Capital:
         query = self.ds.query(kind=self.kind)
         query.add_filter('id', '=', long(itemId))
         for entity in list(query.fetch()):
-            utility.log_info(entity)
-            key = self.ds.key(entity)
-#             key = self.ds.key(self.kind, entity['id'])
-            self.ds.delete(key)
+#             utility.log_info(entity)
+            self.ds.delete(entity.key)
         return 'ok'
     
 def parse_note_time(note):
