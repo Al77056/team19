@@ -42,6 +42,10 @@ class Capital:
         query.id = id;
         return self.get_query_results(query)
 
+    def fetch_allCapitals(self):
+        query = self.ds.query(kind=self.kind)
+        return self.get_query_results(query)
+
     def fetch_notes(self):
         query = self.ds.query(kind=self.kind)
         query.order = ['-timestamp']
