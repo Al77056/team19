@@ -39,7 +39,9 @@ def access_capitals(id):
         utility.log_info(text)
         book.store_capital(text)
         return "done", 200
-
+    elif request.method == 'DELETE':
+        book.delete_capital(id)
+        return "done", 200
 
 @app.errorhandler(500)
 def server_error(err):
