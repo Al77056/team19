@@ -26,7 +26,9 @@ class Capital:
             entity['name'] = item['name']
             
         if item.has_key('location'):
-            entity['location'] = str(item['location'])
+            entity['location'] = datastore.Entity(key=self.ds.key('GeoPoint'))
+            entity['location']['latitude'] = item['location']['latitude']
+            entity['location']['longitude'] = item['location']['longitude']
             
         if item.has_key('countryCode'):
             entity['countryCode'] = item['countryCode']
