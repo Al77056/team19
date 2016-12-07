@@ -25,7 +25,7 @@ def status():
             })
 
 
-@app.route('/api/capital/<id>', methods=['PUT', 'GET', 'DELETE'])
+@app.route('/api/capitals/<id>', methods=['PUT', 'GET', 'DELETE'])
 def access_capitals(id):
     """inserts and retrieves notes from datastore"""
 
