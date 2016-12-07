@@ -44,7 +44,7 @@ def access_capitals(id):
         if success:
             return "done", 200
         else:
-            return "done", 404
+            return jsonify({"code": 0, "message": "Capital record not found"}), 404
 
 @app.errorhandler(500)
 def server_error(err):
