@@ -33,7 +33,10 @@ def access_capitals(id):
     book = capital.Capital()
     if request.method == 'GET':
         result = book.fetch_capital(id)
-        return jsonify(result), 200
+        if len(result):
+            return jsonify(result), 200
+        else:
+            return jsonify({"code": 0, "message": "Capital record not found"}), 404
     elif request.method == 'PUT':
         text = request.get_json()
         utility.log_info(text)
