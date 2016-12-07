@@ -25,8 +25,8 @@ def status():
             })
 
 
-@app.route('/api/capital/<id>', methods=['POST', 'GET', 'DELETE'])
-def access_capitals():
+@app.route('/api/capital/<id>', methods=['PUT', 'GET', 'DELETE'])
+def access_capitals(id):
     """inserts and retrieves notes from datastore"""
 
     book = capital.Capital()
@@ -34,10 +34,11 @@ def access_capitals():
         results = book.fetch_notes()
         result = [capital.parse_note_time(obj) for obj in results]
         return jsonify(result)
-    elif request.method == 'POST':
+    elif request.method == 'PUT':
         print json.dumps(request.get_json())
-        text = request.get_json()['text']
-        book.store_note(text)
+        text = request.get_json()
+        utility.log_info(text)
+        book.store_capital(text)
         return "done"
 
 

@@ -1,21 +1,40 @@
 from datetime import datetime
 from google.cloud import datastore
 import utility
-
+import json
 
 class Capital:
 
     def __init__(self):
         self.ds = datastore.Client(project=utility.project_id())
-        self.kind = "Note"
+        self.kind = "capital"
 
-    def store_note(self, comment):
+    def store_capital(self, msg):
         key = self.ds.key(self.kind)
         entity = datastore.Entity(key)
 
-        entity['text'] = comment
-        entity['timestamp'] = datetime.utcnow()
-
+        item= msg
+        if item.has_key('id'):
+            entity['id'] = item['id']
+        else:
+            return None
+        
+        if item.has_key('country'):
+            entity['country'] = item['country']
+        
+        if item.has_key('name'):
+            entity['name'] = item['name']
+            
+        if item.has_key('location'):
+            entity['location'] = item['location']
+            
+        if item.has_key('countryCode'):
+            entity['countryCode'] = item['countryCode']
+            
+        if item.has_key('continent'):
+            entity['continent'] = item['continent']
+        
+        utility.log_info(entity)       
         return self.ds.put(entity)
 
     def fetch_notes(self):
