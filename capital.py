@@ -6,7 +6,7 @@ import json
 class Capital:
 
     def __init__(self):
-        self.ds = datastore.Client(project=utility.project_id())
+        self.ds = datastore.Client(project="hackathon-team-019")
         self.kind = "capital"
 
     def store_capital(self, msg):
