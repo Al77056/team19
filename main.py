@@ -26,13 +26,12 @@ def status():
 
 
 @app.route('/api/capital/<id>', methods=['POST', 'GET', 'DELETE'])
-def access_capitals():
+def access_capitals(id):
     """inserts and retrieves notes from datastore"""
 
     book = capital.Capital()
     if request.method == 'GET':
-        results = book.fetch_notes()
-        result = [capital.parse_note_time(obj) for obj in results]
+        result = book.fetch_capital(id)
         return jsonify(result)
     elif request.method == 'POST':
         print json.dumps(request.get_json())

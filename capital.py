@@ -7,7 +7,7 @@ class Capital:
 
     def __init__(self):
         self.ds = datastore.Client(project=utility.project_id())
-        self.kind = "Note"
+        self.kind = "Capital"
 
     def store_note(self, comment):
         key = self.ds.key(self.kind)
@@ -17,6 +17,11 @@ class Capital:
         entity['timestamp'] = datetime.utcnow()
 
         return self.ds.put(entity)
+
+    def fetch_capital(self, id):
+        query = self.ds.query(kind=self.kind)
+        query.id = id;
+        return self.get_query_results(query)
 
     def fetch_notes(self):
         query = self.ds.query(kind=self.kind)
