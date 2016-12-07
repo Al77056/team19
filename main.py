@@ -40,8 +40,11 @@ def access_capitals(id):
         book.store_capital(text)
         return "done", 200
     elif request.method == 'DELETE':
-        book.delete_capital(id)
-        return "done", 200
+        success = book.delete_capital(id)
+        if success:
+            return "done", 200
+        else:
+            return "done", 404
 
 @app.errorhandler(500)
 def server_error(err):

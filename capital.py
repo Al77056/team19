@@ -71,10 +71,12 @@ class Capital:
     def delete_capital(self, itemId):
         query = self.ds.query(kind=self.kind)
         query.add_filter('id', '=', long(itemId))
+        success = False
         for entity in list(query.fetch()):
 #             utility.log_info(entity)
             self.ds.delete(entity.key)
-        return 'ok'
+            success = True
+        return success
     
 def parse_note_time(note):
     """converts a greeting to an object"""
