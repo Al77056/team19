@@ -10,19 +10,14 @@ from flask import jsonify
 import capital
 import utility
 
-
 app = Flask(__name__)
 
 
 @app.route('/api/status')
-def status():
+def getStatus():
     """return status"""
-    return str({
-            "insert": False,
-            "fetch": False,
-            "delete": False,
-            "list": False
-            })
+    tel = {'delete': False, 'fetch': False, 'insert': False, 'list': False}
+    return jsonify(tel);
 
 
 @app.route('/api/capitals/<id>', methods=['PUT', 'GET', 'DELETE'])
