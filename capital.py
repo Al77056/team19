@@ -37,10 +37,12 @@ class Capital:
         utility.log_info(entity)       
         return self.ds.put(entity)
 
-    def fetch_capital(self, id):
+    def fetch_capital(self, itemId):
         query = self.ds.query(kind=self.kind)
-        query.id = id;
-        return self.get_query_results(query)
+#         query.id = id;
+#         query.add_filter('id', '=', '5629499534213120')
+#         return self.get_query_results(query)
+        return self.filter_query_results(query, itemId)
 
     def fetch_allCapitals(self):
         query = self.ds.query(kind=self.kind)
@@ -57,6 +59,14 @@ class Capital:
             results.append(dict(entity))
         return results
 
+    def filter_query_results(self, query, itemId):
+        results = list()
+        for entity in list(query.fetch()):
+            de = dict(entity)
+#             utility.log_info(de)
+            if int(de['id']) == int(itemId):
+                results.append(de)
+        return results
 
 def parse_note_time(note):
     """converts a greeting to an object"""
