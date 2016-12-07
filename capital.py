@@ -26,7 +26,7 @@ class Capital:
             entity['name'] = item['name']
             
         if item.has_key('location'):
-            entity['location'] = item['location']
+            entity['location'] = str(item['location'])
             
         if item.has_key('countryCode'):
             entity['countryCode'] = item['countryCode']

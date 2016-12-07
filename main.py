@@ -34,7 +34,6 @@ def access_capitals(id):
         result = book.fetch_capital(id)
         return jsonify(result)
     elif request.method == 'PUT':
-        print json.dumps(request.get_json())
         text = request.get_json()
         utility.log_info(text)
         book.store_capital(text)
