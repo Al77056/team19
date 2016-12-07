@@ -3,7 +3,7 @@ from google.cloud import datastore
 import utility
 
 
-class NoteBook:
+class Capital:
 
     def __init__(self):
         self.ds = datastore.Client(project=utility.project_id())

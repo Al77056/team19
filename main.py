@@ -7,14 +7,14 @@ import base64
 from flask import Flask, request
 from flask import jsonify
 
-import notebook
+import capital
 import utility
 
 
 app = Flask(__name__)
 
 
-@app.route('/status')
+@app.route('/api/status')
 def status():
     """return status"""
     return str({
@@ -24,33 +24,15 @@ def status():
             "list": False
             })
 
-@app.route('/pubsub/receive', methods=['POST'])
-def pubsub_receive():
-    """dumps a received pubsub message to the log"""
 
-    data = {}
-    try:
-        obj = request.get_json()
-        utility.log_info(json.dumps(obj))
-
-        data = base64.b64decode(obj['message']['data'])
-        utility.log_info(data)
-
-    except Exception as e:
-        # swallow up exceptions
-        logging.exception('Oops!')
-
-    return jsonify(data), 200
-
-
-@app.route('/notes', methods=['POST', 'GET'])
-def access_notes():
+@app.route('/api/capital/<id>', methods=['POST', 'GET', 'DELETE'])
+def access_capitals():
     """inserts and retrieves notes from datastore"""
 
-    book = notebook.NoteBook()
+    book = capital.Capital()
     if request.method == 'GET':
         results = book.fetch_notes()
-        result = [notebook.parse_note_time(obj) for obj in results]
+        result = [capital.parse_note_time(obj) for obj in results]
         return jsonify(result)
     elif request.method == 'POST':
         print json.dumps(request.get_json())
