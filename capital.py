@@ -39,10 +39,8 @@ class Capital:
 
     def fetch_capital(self, itemId):
         query = self.ds.query(kind=self.kind)
-#         query.id = id;
-#         query.add_filter('id', '=', '5629499534213120')
-#         return self.get_query_results(query)
-        return self.filter_query_results(query, itemId)
+        query.add_filter('id', '=', long(itemId))
+        return self.get_query_results(query)
 
     def fetch_allCapitals(self):
         query = self.ds.query(kind=self.kind)
