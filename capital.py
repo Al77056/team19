@@ -7,11 +7,7 @@ class Capital:
 
     def __init__(self):
         self.ds = datastore.Client(project=utility.project_id())
-<<<<<<< HEAD
-        self.kind = "Capital"
-=======
         self.kind = "capital"
->>>>>>> 284bc6985b8a3c3e10761632b734dc1a4eb8154a
 
     def store_capital(self, msg):
         key = self.ds.key(self.kind)
