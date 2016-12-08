@@ -110,9 +110,9 @@ def web_frontend():
     result = book.fetch_capitals(None, None)
     countrylist = []
     for r in result:
-        if not r['country'] in countrylist:
-            countrylist.append(r['country'])
-            print r['country']
+        concatStr = r['country'] + " -> "+ r['name']
+        if not concatStr in countrylist:
+            countrylist.append(concatStr)
     countriesText = ""
     countrylist.sort()
     for c in countrylist:
