@@ -76,7 +76,7 @@ class Capital:
 
         print('Message {} published.'.format(message_id))
 
-        return message_id
+        return long(message_id)
 
     def fetch_notes(self):
         query = self.ds.query(kind=self.kind)
