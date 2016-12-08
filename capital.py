@@ -33,7 +33,7 @@ class Capital:
             return self._update_capital_entity(entity, msg)
         
         # create a new one
-        key = self.ds.key(self.kind)
+        key = self.ds.key(self.kind, long(itemId))
         entity = datastore.Entity(key)
         item= msg
         if item.has_key('id'):
