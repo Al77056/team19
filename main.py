@@ -49,6 +49,19 @@ def access_capitals(id):
         else:
             return jsonify({"code": 0, "message": "Capital record not found"}), 404
 
+@app.route('/api/capitals/<id>/store', methods=['POST'])
+def store_capitals(id):
+    text = request.get_json()
+    if not text or not text.has_key('bucket'):
+        return jsonify({"code": 0, "message": "Bucket name is not specified"}), 404
+    bucket = text['bucket']
+    book = capital.Capital()
+    success = book.save_capital_to_bucket(id, bucket)
+    if success:
+        return '', 200
+    else:
+        return jsonify({"code": 0, "message": "No capital record is stored"}), 404
+
 @app.errorhandler(500)
 def server_error(err):
     """Error handler"""

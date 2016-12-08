@@ -1,5 +1,6 @@
 from datetime import datetime
 from google.cloud import datastore
+from google.cloud import storage
 import utility
 import json
 
@@ -82,6 +83,25 @@ class Capital:
             success = True
         return success
     
+    def save_capital_to_bucket(self, itemId, bucket_name):
+        query = self.ds.query(kind=self.kind)
+        query.add_filter('id', '=', long(itemId))
+        for entity in list(query.fetch()):
+            content = json.dumps(dict(entity))
+            object_name = 'id = {}'.format(itemId)
+            self._store_in_bucket(bucket_name, object_name, content)
+            return True
+        return False
+    
+    def _store_in_bucket(self, bucket_name, object_name, content):
+        storage_client = storage.client.Client(project="hackathon-team-019")
+        bucket = storage.bucket.Bucket(storage_client, bucket_name)
+        if not bucket.exists():
+            bucket.create()
+        
+        blob = storage.blob.Blob(object_name, bucket)
+        blob.upload_from_string(content)
+
 def parse_note_time(note):
     """converts a greeting to an object"""
     return {
