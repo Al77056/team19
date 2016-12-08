@@ -51,16 +51,20 @@ def access_capitals(id):
 
 @app.route('/api/capitals/<id>/store', methods=['POST'])
 def store_capitals(id):
-    text = request.get_json()
-    if not text or not text.has_key('bucket'):
-        return jsonify({"code": 0, "message": "Bucket name is not specified"}), 404
-    bucket = text['bucket']
-    book = capital.Capital()
-    success = book.save_capital_to_bucket(id, bucket)
-    if success:
-        return '', 200
-    else:
-        return jsonify({"code": 0, "message": "No capital record is stored"}), 404
+    try:
+        text = request.get_json()
+        if not text or not text.has_key('bucket'):
+            return jsonify({"code": 0, "message": "Bucket name is not specified"}), 404
+        bucket = text['bucket']
+        book = capital.Capital()
+        success = book.save_capital_to_bucket(id, bucket)
+        if success:
+            return 'Successfully stored in GCS', 200
+        else:
+            return jsonify({"code": 0, "message": "Capital record not found"}), 404
+    except Exception as ex:
+        utility.log_info(ex.message)
+        return jsonify({"code": 0, "message": "Unexpected error"}), 500
 
 @app.route('/api/capitals/<id>/publish', methods=['POST'])
 def publish_capitals_record(id):
