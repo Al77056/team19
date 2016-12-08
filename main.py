@@ -16,14 +16,16 @@ app = Flask(__name__)
 @app.route('/api/status')
 def getStatus():
     """return status"""
-    tel = {'delete': True, 'fetch': True, 'insert': True, 'list': True, "query": False, "search": False, "pubsub": True, "storage": True}
+    tel = {'delete': True, 'fetch': True, 'insert': True, 'list': True, "query": True, "search": False, "pubsub": True, "storage": True}
     return jsonify(tel), 200
 
 @app.route('/api/capitals', methods=['GET'])
-def access_all_capitals():
-    """Get all capitals"""
+def getCaptials():
+    """Get all capitals with optional query string"""
+    query_strings = request.args.get('query')
+    search_strings = request.args.get('search')
     book = capital.Capital()
-    result = book.fetch_allCapitals()
+    result = book.fetch_capitals(query_strings, search_strings)
     return jsonify(result), 200
 
 @app.route('/api/capitals/<id>', methods=['PUT', 'GET', 'DELETE'])

@@ -83,6 +83,16 @@ class Capital:
         query.order = ['-timestamp']
         return self.get_query_results(query)
 
+    def fetch_capitals(self, query_string, search_string):
+        query = self.ds.query(kind=self.kind)
+        queryString = str(query_string)
+        if(len(queryString) > 0):
+            lists = queryString.split(':', 1)
+            if(len(lists) > 1 and len(lists[0]) > 0 and len(lists[1]) > 0):
+                query.add_filter(lists[0], '=', lists[1])
+
+        return self.get_query_results(query)
+
     def get_query_results(self, query):
         results = list()
         for entity in list(query.fetch()):
