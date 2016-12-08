@@ -92,10 +92,10 @@ class Capital:
                 query.add_filter(lists[0], '=', lists[1])
 
         results = self.get_query_results(query)
-        
-        searchString = str(search_string)
-        if(len(searchString) > 0 and len(results) > 0):
-            results = self.search_capitals(results, searchString)
+        if search_string:
+            searchString = str(search_string)
+            if(len(searchString) > 0 and len(results) > 0):
+                results = self.search_capitals(results, searchString)
 
         return results
 
