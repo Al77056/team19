@@ -123,7 +123,7 @@ class Capital:
         query.add_filter('id', '=', long(itemId))
         for entity in list(query.fetch()):
             content = json.dumps(dict(entity))
-            object_name = 'id = {}'.format(itemId)
+            object_name = str(itemId)
             self._store_in_bucket(bucket_name, object_name, content)
             return True
         return False
