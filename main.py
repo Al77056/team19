@@ -49,7 +49,7 @@ def access_capitals(id):
         else:
             return jsonify({"code": 0, "message": "Capital record not found"}), 404
 
-@app.route('/api/capitals/<id>/store', methods=['POST'])
+@app.route('/api/capitals/<int:id>/store', methods=['POST'])
 def store_capitals(id):
     try:
         text = request.get_json()
