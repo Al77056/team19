@@ -99,6 +99,23 @@ class Capital:
 
         return results
 
+    def get_captial_coords(self):
+        '''
+        return captial coordinates in a list, each item is of the format 
+        {'lat': -25.363, 'lng': 131.044} needed by google map
+        '''
+        alldata = self.fetch_allCapitals()
+        coords = self._extract_coords(alldata)
+        utility.log_info(coords)
+        return coords
+        
+    def _extract_coords(self, country_list):
+        result = []
+        for ct in country_list:
+            if ct.has_key('location'):
+                result.append({'lat': ct['location']['latitude'], 'lng': ct['location']['longitude']})
+        return result
+
     def search_capitals(self, results, searchString):
         the_result = list()
         for entity in results:
