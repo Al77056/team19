@@ -26,22 +26,6 @@ def access_all_capitals():
     result = book.fetch_allCapitals()
     return jsonify(result), 200
 
-@app.route('/api/capitals/<id>/publish', methods=['POST'])
-def publish_capitals_record():
-    try:
-        book = capital.Capital()
-        text = request.get_json()
-        success = book.fetch_capital(id)
-        if success:
-            msgId = book.publish_toPubSub(text['topic'], id)
-            return jsonify({"messageId": msgId}), 200
-        else:
-            return jsonify({"code": 0, "message": "Capital record not found"}), 404
-    except Exception as e:
-        logging.exception('Oops! 500!!')
-        return jsonify({"code": 0, "message": "Unexpected error"}), 500
-
-
 @app.route('/api/capitals/<id>', methods=['PUT', 'GET', 'DELETE'])
 def access_capitals(id):
     """inserts and retrieves notes from datastore"""
@@ -64,6 +48,38 @@ def access_capitals(id):
             return "done", 200
         else:
             return jsonify({"code": 0, "message": "Capital record not found"}), 404
+
+@app.route('/api/capitals/<int:id>/store', methods=['POST'])
+def store_capitals(id):
+    try:
+        text = request.get_json()
+        if not text or not text.has_key('bucket'):
+            return jsonify({"code": 0, "message": "Bucket name is not specified"}), 404
+        bucket = text['bucket']
+        book = capital.Capital()
+        success = book.save_capital_to_bucket(id, bucket)
+        if success:
+            return 'Successfully stored in GCS', 200
+        else:
+            return jsonify({"code": 0, "message": "Capital record not found"}), 404
+    except Exception as ex:
+        utility.log_info(ex.message)
+        return jsonify({"code": 0, "message": "Unexpected error"}), 500
+
+@app.route('/api/capitals/<id>/publish', methods=['POST'])
+def publish_capitals_record(id):
+    try:
+        book = capital.Capital()
+        text = request.get_json()
+        success = book.fetch_capital(id)
+        if success:
+            msgId = book.publish_toPubSub(text['topic'], id)
+            return jsonify({"messageId": msgId}), 200
+        else:
+            return jsonify({"code": 0, "message": "Capital record not found"}), 404
+    except Exception as e:
+        logging.exception('Oops! 500!!')
+        return jsonify({"code": 0, "message": "Unexpected error"}), 500
 
 @app.errorhandler(500)
 def server_error(err):
