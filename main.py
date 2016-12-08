@@ -110,15 +110,36 @@ def fetch_web_frontend_simple():
     result = book.fetch_capitals(None, None)
     countrylist = []
     for r in result:
-        concatStr = r['country'] + " -> "+ r['name']
+        concatStr = r['country'] + "</td><td>"+ r['name']
         if not concatStr in countrylist:
             countrylist.append(concatStr)
-    countriesText = ""
+
+    style = ""
+    style += "<head>"
+    style += "<style>"
+    style += "table, th, td {"
+    style += "    border: 1px solid black;"
+    style += "    border-collapse: collapse;"
+    style += "}"
+    style += "tbody tr:nth-child(odd) {"
+    style += "    background-color: #ccc;"
+    style += "}"
+    style += "</style>"
+    style += "</head>"
+
+    countriesText = "<table>"
+    countriesText += "<tr>"
+    countriesText += "<th>Country</th>"
+    countriesText += "<th>Capital</th>"
+    countriesText += "</tr>"
+
     countrylist.sort()
     for c in countrylist:
-        countriesText += c+"<br>"
+        countriesText += "<tr><td>"+c+"</td></tr>"
 
-    return "<html><body>"+countriesText+"</body></html>"
+    countriesText += "</table>"
+
+    return "<html>"+style+"<body>"+countriesText+"</body></html>"
 
 @app.route('/web_frontend_gmaps', methods=['GET'])
 def fetch_web_frontend_gmaps():
