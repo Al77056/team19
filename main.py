@@ -158,38 +158,24 @@ def fetch_web_frontend_gmaps():
     htmlHeader = "<head>"
     htmlHeader += "<style>"
 
-    htmlHeader += "#map {"
-    htmlHeader += "    height: 400px;"
-    htmlHeader += "    width: 100%;"
-    htmlHeader += "   }"
+    htmlHeader += "body {"
+    htmlHeader += "    margin: 0;"
+    htmlHeader += "}"
+
     htmlHeader += "</style>"
     htmlHeader += "</head>"
 
-    jscript = ""
-    jscript += "<script>"
-    jscript += "  function initMap() {"
-    jscript += "    var uluru = {lat: -25.363, lng: 131.044};"
-    jscript += "    var map = new google.maps.Map(document.getElementById('map'), {"
-    jscript += "      zoom: 4,"
-    jscript += "      center: uluru"
-    jscript += "    });"
-    jscript += "    var marker = new google.maps.Marker({"
-    jscript += "      position: uluru,"
-    jscript += "      map: map"
-    jscript += "    });"
-    jscript += "  }"
-    jscript += "</script>"
-
-    jscript += "<script async defer"
-    jscript += "src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBVx4nNVOa39fcdcXUh40vFaED7NIo7A6Q&callback=initMap'>"
-    jscript += "</script>"
-
     bodyPart = "";
 
+    iframe = ""
+    iframe += "<iframe src='//www.google.com/maps/embed/v1/view?center=0%2C0"
+    iframe += "&markers=color:blue%7Clabel:S%7C40.702147%2C-74.015794"
+    iframe += "&zoom=2"
+    iframe += "&key=AIzaSyBVx4nNVOa39fcdcXUh40vFaED7NIo7A6Q' style='border: 0; width: 100%; height: 100%'>"
+    iframe += "</iframe>"
+
     bodyPart += "<body>"
-    bodyPart += "<h3>My Google Maps Demo</h3>"
-    bodyPart += "<div id='map'></div>"
-    bodyPart += jscript
+    bodyPart += iframe
     bodyPart += "</body>"
 
     return "<html>"+htmlHeader+"<body>"+bodyPart+"</html>"
