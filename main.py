@@ -49,6 +49,21 @@ def access_capitals(id):
         else:
             return jsonify({"code": 0, "message": "Capital record not found"}), 404
 
+@app.route('/api/capitals/<id>/publish', methods=['POST'])
+def publish_capitals_record(id):
+    try:
+        book = capital.Capital()
+        text = request.get_json()
+        success = book.fetch_capital(id)
+        if success:
+            msgId = book.publish_toPubSub(text['topic'], id)
+            return jsonify({"messageId": msgId}), 200
+        else:
+            return jsonify({"code": 0, "message": "Capital record not found"}), 404
+    except Exception as e:
+        logging.exception('Oops! 500!!')
+        return jsonify({"code": 0, "message": "Unexpected error"}), 500
+
 @app.errorhandler(500)
 def server_error(err):
     """Error handler"""

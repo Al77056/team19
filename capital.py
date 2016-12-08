@@ -3,6 +3,9 @@ from google.cloud import datastore
 import utility
 import json
 
+from flask import jsonify
+from google.cloud import pubsub
+
 class Capital:
 
     def __init__(self):
@@ -51,6 +54,23 @@ class Capital:
     def fetch_allCapitals(self):
         query = self.ds.query(kind=self.kind)
         return self.get_query_results(query)
+
+    def publish_toPubSub(self, topic_name, itemId):
+        query = self.ds.query(kind=self.kind)
+        query.add_filter('id', '=', long(itemId))
+        cap = self.get_query_results(query)
+
+        pubsub_client = pubsub.Client()
+        topic = pubsub_client.topic(topic_name)
+
+        # Data must be a bytestring
+        data = jsonify(cap)
+
+        message_id = topic.publish(data)
+
+        print('Message {} published.'.format(message_id))
+
+        return message_id
 
     def fetch_notes(self):
         query = self.ds.query(kind=self.kind)
