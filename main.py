@@ -104,6 +104,22 @@ def pubsub_receive():
 
     return jsonify(data), 200
 
+@app.route('/web_frontend', methods=['GET'])
+def web_frontend():
+    book = capital.Capital()
+    result = book.fetch_capitals(None, None)
+    countrylist = []
+    for r in result:
+        if not r['country'] in countrylist:
+            countrylist.append(r['country'])
+            print r['country']
+    countriesText = ""
+    countrylist.sort()
+    for c in countrylist:
+        countriesText += c+"<br>"
+
+    return "<html><body>"+countriesText+"</body></html>"
+
 @app.errorhandler(500)
 def server_error(err):
     """Error handler"""
