@@ -4,6 +4,11 @@ from google.cloud import storage
 import utility
 import json
 
+from flask import jsonify
+from google.cloud import pubsub
+
+import argparse
+
 class Capital:
 
     def __init__(self):
@@ -52,6 +57,26 @@ class Capital:
     def fetch_allCapitals(self):
         query = self.ds.query(kind=self.kind)
         return self.get_query_results(query)
+
+    def publish_toPubSub(self, topic_name, itemId):
+        query = self.ds.query(kind=self.kind)
+        query.add_filter('id', '=', long(itemId))
+        cap = self.get_query_results(query)
+
+        pubsub_client = pubsub.Client(project="hackathon-team-019")
+        topic = pubsub_client.topic(topic_name)
+
+        # Data must be a bytestring
+        data = json.dumps(cap)
+        
+
+        data = data.encode('utf-8')
+
+        message_id = topic.publish(data)
+
+        print('Message {} published.'.format(message_id))
+
+        return message_id
 
     def fetch_notes(self):
         query = self.ds.query(kind=self.kind)
