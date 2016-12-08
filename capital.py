@@ -68,7 +68,7 @@ class Capital:
         topic = pubsub_client.topic(resourceNames[-1])
 
         # Data must be a bytestring
-        data = json.dumps(cap)
+        data = json.dumps(cap[0])
 
         data = data.encode('utf-8')
 
