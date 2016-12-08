@@ -9,35 +9,39 @@ class Capital:
         self.ds = datastore.Client(project="hackathon-team-019")
         self.kind = "capital"
 
-    def store_capital(self, msg):
+
+    def _update_capital_entity(self, entity, item):
+        if item.has_key('country'):
+            entity['country'] = item['country']
+        if item.has_key('name'):
+            entity['name'] = item['name']
+        if item.has_key('location'):
+            entity['location'] = datastore.Entity(key=self.ds.key('GeoPoint'))
+            entity['location']['latitude'] = item['location']['latitude']
+            entity['location']['longitude'] = item['location']['longitude']
+        if item.has_key('countryCode'):
+            entity['countryCode'] = item['countryCode']
+        if item.has_key('continent'):
+            entity['continent'] = item['continent']
+        return self.ds.put(entity)
+
+    def store_capital(self, msg, itemId):
+        query = self.ds.query(kind=self.kind)
+        query.add_filter('id', '=', long(itemId))
+        for entity in list(query.fetch()):
+            # update the first instance
+            return self._update_capital_entity(entity, msg)
+        
+        # create a new one
         key = self.ds.key(self.kind)
         entity = datastore.Entity(key)
-
         item= msg
         if item.has_key('id'):
             entity['id'] = item['id']
         else:
             return None
-        
-        if item.has_key('country'):
-            entity['country'] = item['country']
-        
-        if item.has_key('name'):
-            entity['name'] = item['name']
             
-        if item.has_key('location'):
-            entity['location'] = datastore.Entity(key=self.ds.key('GeoPoint'))
-            entity['location']['latitude'] = item['location']['latitude']
-            entity['location']['longitude'] = item['location']['longitude']
-            
-        if item.has_key('countryCode'):
-            entity['countryCode'] = item['countryCode']
-            
-        if item.has_key('continent'):
-            entity['continent'] = item['continent']
-        
-        utility.log_info(entity)       
-        return self.ds.put(entity)
+        return self._update_capital_entity(entity, item)       
 
     def fetch_capital(self, itemId):
         query = self.ds.query(kind=self.kind)

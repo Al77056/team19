@@ -40,7 +40,7 @@ def access_capitals(id):
     elif request.method == 'PUT':
         text = request.get_json()
         utility.log_info(text)
-        book.store_capital(text)
+        book.store_capital(text, id)
         return "done", 200
     elif request.method == 'DELETE':
         success = book.delete_capital(id)
