@@ -118,7 +118,45 @@ def fetch_web_frontend():
     for c in countrylist:
         countriesText += c+"<br>"
 
-    return "<html><body>"+countriesText+"</body></html>"
+    htmlHeader = "<head>"
+    htmlHeader += "<style>"
+
+    htmlHeader += "#map {"
+    htmlHeader += "    height: 400px;"
+    htmlHeader += "    width: 100%;"
+    htmlHeader += "   }"
+    htmlHeader += "</style>"
+    htmlHeader += "</head>"
+
+    jscript = ""
+    jscript += "<script>"
+    jscript += "  function initMap() {"
+    jscript += "    var uluru = {lat: -25.363, lng: 131.044};"
+    jscript += "    var map = new google.maps.Map(document.getElementById('map'), {"
+    jscript += "      zoom: 4,"
+    jscript += "      center: uluru"
+    jscript += "    });"
+    jscript += "    var marker = new google.maps.Marker({"
+    jscript += "      position: uluru,"
+    jscript += "      map: map"
+    jscript += "    });"
+    jscript += "  }"
+    jscript += "</script>"
+
+    jscript += "<script async defer"
+    jscript += "src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBVx4nNVOa39fcdcXUh40vFaED7NIo7A6Q&callback=initMap'>"
+    jscript += "</script>"
+
+    bodyPart = "";
+
+    bodyPart += "<body>"
+    bodyPart += "<h3>My Google Maps Demo</h3>"
+    bodyPart += "<div id='map'></div>"
+    bodyPart += jscript
+    bodyPart += countriesText
+    bodyPart += "</body>"
+
+    return "<html>"+htmlHeader+"<body>"+bodyPart+"</html>"
 
 
 @app.errorhandler(500)
