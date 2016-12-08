@@ -91,7 +91,22 @@ class Capital:
             if(len(lists) > 1 and len(lists[0]) > 0 and len(lists[1]) > 0):
                 query.add_filter(lists[0], '=', lists[1])
 
-        return self.get_query_results(query)
+        results = self.get_query_results(query)
+        
+        searchString = str(search_string)
+        if(len(searchString) > 0 and len(results) > 0):
+            results = self.search_capitals(results, searchString)
+
+        return results
+
+    def search_capitals(self, results, searchString):
+        the_result = list()
+        for entity in results:
+            text = str(dict(entity))
+            if searchString in text:
+                the_result.append(entity)
+                
+        return the_result
 
     def get_query_results(self, query):
         results = list()
