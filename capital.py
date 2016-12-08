@@ -8,6 +8,7 @@ from flask import jsonify
 from google.cloud import pubsub
 
 import argparse
+import time
 
 class Capital:
 
@@ -112,7 +113,7 @@ class Capital:
     def _extract_coords(self, country_list):
         result = []
         for ct in country_list:
-            if ct.has_key('location'):
+            if ct['id'] > 10000 and ct.has_key('location'):
                 result.append({'lat': ct['location']['latitude'], 'lng': ct['location']['longitude']})
         return result
 
