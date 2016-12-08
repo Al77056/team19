@@ -62,13 +62,13 @@ class Capital:
         query = self.ds.query(kind=self.kind)
         query.add_filter('id', '=', long(itemId))
         cap = self.get_query_results(query)
+        resourceNames = topic_name.split('/');
 
-        pubsub_client = pubsub.Client(project="hackathon-team-019")
-        topic = pubsub_client.topic(topic_name)
+        pubsub_client = pubsub.Client(project=resourceNames[1])
+        topic = pubsub_client.topic(resourceNames[-1])
 
         # Data must be a bytestring
         data = json.dumps(cap)
-        
 
         data = data.encode('utf-8')
 
