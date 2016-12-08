@@ -16,7 +16,7 @@ app = Flask(__name__)
 @app.route('/api/status')
 def getStatus():
     """return status"""
-    tel = {'delete': True, 'fetch': True, 'insert': True, 'list': True, "query": True, "search": False, "pubsub": True, "storage": True}
+    tel = {'delete': True, 'fetch': True, 'insert': True, 'list': True, "query": True, "search": True, "pubsub": True, "storage": True}
     return jsonify(tel), 200
 
 @app.route('/api/capitals', methods=['GET'])
