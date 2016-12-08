@@ -104,8 +104,24 @@ def pubsub_receive():
 
     return jsonify(data), 200
 
-@app.route('/web_frontend', methods=['GET'])
-def fetch_web_frontend():
+@app.route('/web_frontend_simple', methods=['GET'])
+def fetch_web_frontend_simple():
+    book = capital.Capital()
+    result = book.fetch_capitals(None, None)
+    countrylist = []
+    for r in result:
+        concatStr = r['country'] + " -> "+ r['name']
+        if not concatStr in countrylist:
+            countrylist.append(concatStr)
+    countriesText = ""
+    countrylist.sort()
+    for c in countrylist:
+        countriesText += c+"<br>"
+
+    return "<html><body>"+countriesText+"</body></html>"
+
+@app.route('/web_frontend_gmaps', methods=['GET'])
+def fetch_web_frontend_gmaps():
     book = capital.Capital()
     result = book.fetch_capitals(None, None)
     countrylist = []
@@ -153,11 +169,9 @@ def fetch_web_frontend():
     bodyPart += "<h3>My Google Maps Demo</h3>"
     bodyPart += "<div id='map'></div>"
     bodyPart += jscript
-    bodyPart += countriesText
     bodyPart += "</body>"
 
     return "<html>"+htmlHeader+"<body>"+bodyPart+"</html>"
-
 
 @app.errorhandler(500)
 def server_error(err):
