@@ -6,6 +6,8 @@ import json
 from flask import jsonify
 from google.cloud import pubsub
 
+import argparse
+
 class Capital:
 
     def __init__(self):
@@ -60,11 +62,14 @@ class Capital:
         query.add_filter('id', '=', long(itemId))
         cap = self.get_query_results(query)
 
-        pubsub_client = pubsub.Client()
+        pubsub_client = pubsub.Client(project="hackathon-team-019")
         topic = pubsub_client.topic(topic_name)
 
         # Data must be a bytestring
-        data = jsonify(cap)
+        data = json.dumps(cap)
+        
+
+        data = data.encode('utf-8')
 
         message_id = topic.publish(data)
 
