@@ -105,7 +105,7 @@ def pubsub_receive():
     return jsonify(data), 200
 
 @app.route('/web_frontend', methods=['GET'])
-def web_frontend():
+def fetch_web_frontend():
     book = capital.Capital()
     result = book.fetch_capitals(None, None)
     countrylist = []
@@ -119,6 +119,7 @@ def web_frontend():
         countriesText += c+"<br>"
 
     return "<html><body>"+countriesText+"</body></html>"
+
 
 @app.errorhandler(500)
 def server_error(err):
