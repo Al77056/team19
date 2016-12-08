@@ -81,6 +81,24 @@ def publish_capitals_record(id):
         logging.exception('Oops! 500!!')
         return jsonify({"code": 0, "message": "Unexpected error"}), 500
 
+@app.route('/pubsub/receive', methods=['POST'])
+def pubsub_receive():
+    """dumps a received pubsub message to the log"""
+
+    data = {}
+    try:
+        obj = request.get_json()
+        utility.log_info(json.dumps(obj))
+
+        data = base64.b64decode(obj['message']['data'])
+        utility.log_info(data)
+
+    except Exception as e:
+        # swallow up exceptions
+        logging.exception('Oops!')
+
+    return jsonify(data), 200
+
 @app.errorhandler(500)
 def server_error(err):
     """Error handler"""
