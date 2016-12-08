@@ -61,7 +61,7 @@ def store_capitals(id):
         return '', 200
     else:
         return jsonify({"code": 0, "message": "No capital record is stored"}), 404
-=======
+
 @app.route('/api/capitals/<id>/publish', methods=['POST'])
 def publish_capitals_record(id):
     try:
@@ -76,7 +76,6 @@ def publish_capitals_record(id):
     except Exception as e:
         logging.exception('Oops! 500!!')
         return jsonify({"code": 0, "message": "Unexpected error"}), 500
->>>>>>> origin/master
 
 @app.errorhandler(500)
 def server_error(err):
