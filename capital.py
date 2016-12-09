@@ -109,12 +109,25 @@ class Capital:
         coords = self._extract_coords(alldata)
 #         utility.log_info(coords)
         return coords
-        
+
     def _extract_coords(self, country_list):
         result = []
         for ct in country_list:
             if ct['id'] > 10000 and ct.has_key('location'):
                 result.append({'lat': ct['location']['latitude'], 'lng': ct['location']['longitude']})
+        return result
+
+    def get_captial_coords_info(self):
+        alldata = self.fetch_allCapitals()
+        coords = self.extract_coords_info(alldata)
+        return coords
+
+    def extract_coords_info(self, country_list):
+        result = []
+        for ct in country_list:
+            if ct['id'] > 10000 and ct.has_key('location'):
+                nm = ct['name'] + " at " + ct['country']
+                result.append({'lat': ct['location']['latitude'], 'lng': ct['location']['longitude'], 'name': nm})
         return result
 
     def search_capitals(self, results, searchString):

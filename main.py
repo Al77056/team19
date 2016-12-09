@@ -141,69 +141,66 @@ def fetch_web_frontend_simple():
 
     return "<html>"+style+"<body>"+countriesText+"</body></html>"
 
-@app.route('/web_frontend_gmaps', methods=['GET'])
+@app.route('/web_frontend_gmaps')
 def fetch_web_frontend_gmaps():
-
     book = capital.Capital()
-    result = book.fetch_capitals(None, None)
-    countrylist = []
-    for r in result:
-        concatStr = r['country'] + " -> "+ r['name']
-        if not concatStr in countrylist:
-            countrylist.append(concatStr)
-    countriesText = ""
-    countrylist.sort()
-    for c in countrylist:
-        countriesText += c+"<br>"
+    page = """
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Map of capitals</title>
+    <meta content="text/html; charset="UTF-8">
+    <style>
+       #map {
+        height: 800px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      function initMap() {
+        var centerLoc = {lat: 0, lng:0};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: centerLoc
+        });
+        """;
+    cnt = 1
+    cntS = str(cnt)
+    for loc in book.get_captial_coords_info():
+        latlng = 'luru = {lat: ' + str(loc['lat']) + ', lng: '+ str(loc['lng']) +'};'
+        page += latlng
 
-    htmlHeader = "<head>"
-    htmlHeader += "<style>"
+        page += """
+        var infowindow"""+cntS+""" = new google.maps.InfoWindow({
+          content:  " """ + str(loc['name']) + """ "
+        }); """
 
-    htmlHeader += "body {"
-    htmlHeader += "    margin: 0;"
-    htmlHeader += "}"
+        page +="""
+        var marker"""+cntS+""" = new google.maps.Marker({
+          position: luru,
+          map: map
+        });"""
 
-    htmlHeader += "</style>"
-    htmlHeader += "</head>"
+        page += """
+        marker"""+cntS+""".addListener('click', function() {
+          infowindow"""+cntS+""".open(map, marker"""+cntS+""");
+        });
+        """
+        cnt = cnt + 1
+        cntS = str(cnt)
 
-    bodyPart = "";
-
-    #url = "http//www.google.com/maps/embed/v1/view?center=0,0&markers=color:blue|label:S|40.702147,-74.015794&zoom=2&key=AIzaSyBVx4nNVOa39fcdcXUh40vFaED7NIo7A6Q"
-    url = "center=0,0" + "&zoom=2" + "&markers=color:blue%7Clabel:S%7C40.702147,-74.015794" + "&key=AIzaSyBVx4nNVOa39fcdcXUh40vFaED7NIo7A6Q" 
-    #encodedUrl = urllib.quote_plus(url)
-    encodedUrl = "https://maps.googleapis.com/maps/api/staticmap?"+url
-
-    anotherUrl = "http://maps.google.com/maps?q=12.927923,77.627108&q=10.927923,77.627108&z=15&output=embed"
-
-    print encodedUrl
-
-    iframe = ""
-    iframe += "<iframe src='https://www.google.com/maps/embed/v1/view?center=0%2C0"
-#     iframe += "&markers=color:blue%7Clabel:S%7C40.702147%2C-74.015794"
-    iframe += "&zoom=2"
-    iframe += "&callback=initMap"
-    iframe += "&key=AIzaSyBVx4nNVOa39fcdcXUh40vFaED7NIo7A6Q' style='border: 0; width: 100%; height: 100%'>"
-    
-    iframe += "<script>"
-    iframe += "  function initMap() {"
-    iframe += "    var uluru = {lat: -25.363, lng: 131.044};"
-    iframe += "    var map = new google.maps.Map(document.getElementById('map'), {"
-    iframe += "      zoom: 4,"
-    iframe += "      center: uluru"
-    iframe += "    });"
-    iframe += "    var marker = new google.maps.Marker({"
-    iframe += "      position: uluru,"
-    iframe += "      map: map"
-    iframe += "    });"
-    iframe += "  }"
-    iframe += "</script>"
-
-    iframe += "</iframe>"
-    bodyPart += "<body>"
-    bodyPart += iframe
-    bodyPart += "</body>"
-
-    return "<html>"+htmlHeader+"<body>"+bodyPart+"</html>"
+    page += """
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?callback=initMap">
+    </script>
+  </body>
+</html>"""
+    return page, 200
 
 @app.route('/map')
 def show_map():
