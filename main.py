@@ -26,10 +26,9 @@ def getCaptials():
     search_strings = request.args.get('search')
     book = capital.Capital()
     result = book.fetch_capitals(query_strings, search_strings)
-    if len(result) > 20:
-        return jsonify(result[0:20]), 200
-    else:
-        return jsonify(result), 200
+#     if len(result) > 20:
+#         return jsonify(result[0:20]), 200
+    return jsonify(result), 200
 
 @app.route('/api/capitals/<id>', methods=['PUT', 'GET', 'DELETE'])
 def access_capitals(id):
@@ -199,33 +198,28 @@ def fetch_web_frontend_gmaps():
 @app.route('/map')
 def show_map():
     book = capital.Capital()
-    # !/usr/bin/env python
     page = """
     <!DOCTYPE html>
 <html>
   <head>
-    <title>Google Maps</title>
+    <title>Map of capitals</title>
     <meta content="text/html; charset="UTF-8">
     <style>
        #map {
-        height: 600px;
+        height: 800px;
         width: 100%;
        }
     </style>
   </head>
   <body>
-    <h3>Google Maps</h3>
+    <h3>Map of capitals</h3>
     <div id="map"></div>
     <script>
       function initMap() {
-        var uluru = {lat: 29.7604, lng: -95.3698};
+        var centerLoc = {lat: 29.7604, lng: -95.3698};
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 3,
-          center: uluru
-        });
-        var marker = new google.maps.Marker({
-          position: uluru,
-          map: map
+          zoom: 2,
+          center: centerLoc
         });
         """;
     for loc in book.get_captial_coords():
@@ -241,7 +235,7 @@ def show_map():
       }
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCd-q7BKDHIqlgzpmFVbCHatjxeMLTJUBQ&zoom=2&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?callback=initMap">
     </script>
   </body>
 </html>"""
