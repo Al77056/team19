@@ -9,6 +9,7 @@ from flask import jsonify
 
 import capital
 import utility
+import urllib
 
 app = Flask(__name__)
 
@@ -167,12 +168,17 @@ def fetch_web_frontend_gmaps():
 
     bodyPart = "";
 
+    #url = "http//www.google.com/maps/embed/v1/view?center=0,0&markers=color:blue|label:S|40.702147,-74.015794&zoom=2&key=AIzaSyBVx4nNVOa39fcdcXUh40vFaED7NIo7A6Q"
+    url = "center=0,0" + "&zoom=2" + "&markers=color:blue%7Clabel:S%7C40.702147,-74.015794" + "&key=AIzaSyBVx4nNVOa39fcdcXUh40vFaED7NIo7A6Q" 
+    #encodedUrl = urllib.quote_plus(url)
+    encodedUrl = "https://maps.googleapis.com/maps/api/staticmap?"+url
+
+    anotherUrl = "http://maps.google.com/maps?q=12.927923,77.627108&q=10.927923,77.627108&z=15&output=embed"
+
+    print encodedUrl
+
     iframe = ""
-    iframe += "<iframe src='//www.google.com/maps/embed/v1/view?center=0%2C0"
-    iframe += "&markers=color:blue%7Clabel:S%7C40.702147%2C-74.015794"
-    iframe += "&zoom=2"
-    iframe += "&key=AIzaSyBVx4nNVOa39fcdcXUh40vFaED7NIo7A6Q' style='border: 0; width: 100%; height: 100%'>"
-    iframe += "</iframe>"
+    iframe += "<iframe src='"+anotherUrl+"' style='border: 0; width: 100%; height: 100%'></iframe>"
 
     bodyPart += "<body>"
     bodyPart += iframe
