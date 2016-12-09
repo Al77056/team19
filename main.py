@@ -26,10 +26,11 @@ def getCaptials():
     query_strings = request.args.get('query')
     search_strings = request.args.get('search')
     book = capital.Capital()
-    result = book.fetch_capitals(query_strings, search_strings)
-#     if len(result) > 20:
-#         return jsonify(result[0:20]), 200
-    return jsonify(result), 200
+    if not query_strings and not search_strings:
+        return jsonify(book.fetch_20Capitals()), 200
+    else:
+        result = book.fetch_capitals(query_strings, search_strings)
+        return jsonify(result), 200
 
 @app.route('/api/capitals/<id>', methods=['PUT', 'GET', 'DELETE'])
 def access_capitals(id):

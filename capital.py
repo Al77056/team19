@@ -59,6 +59,13 @@ class Capital:
         query = self.ds.query(kind=self.kind)
         return self.get_query_results(query)
 
+    def fetch_20Capitals(self):
+        query = self.ds.query(kind=self.kind)
+        results = list()
+        for entity in list(query.fetch(limit=20)):
+            results.append(dict(entity))
+        return results
+
     def publish_toPubSub(self, topic_name, itemId):
         query = self.ds.query(kind=self.kind)
         query.add_filter('id', '=', long(itemId))
