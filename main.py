@@ -196,7 +196,7 @@ def fetch_web_frontend_gmaps():
       }
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?callback=initMap&key=AIzaSyAsp0h0PizjfIzT-KSsnCdf5eTOnquPy0I">
     </script>
   </body>
 </html>"""
