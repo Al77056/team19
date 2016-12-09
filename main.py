@@ -204,7 +204,7 @@ def show_map():
     <!DOCTYPE html>
 <html>
   <head>
-    <title>Team 3 Google Maps</title>
+    <title>Google Maps</title>
     <meta content="text/html; charset="UTF-8">
     <style>
        #map {
