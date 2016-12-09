@@ -27,10 +27,9 @@ def getCaptials():
     search_strings = request.args.get('search')
     book = capital.Capital()
     result = book.fetch_capitals(query_strings, search_strings)
-    if len(result) > 20:
-        return jsonify(result[0:20]), 200
-    else:
-        return jsonify(result), 200
+#     if len(result) > 20:
+#         return jsonify(result[0:20]), 200
+    return jsonify(result), 200
 
 @app.route('/api/capitals/<id>', methods=['PUT', 'GET', 'DELETE'])
 def access_capitals(id):
@@ -144,6 +143,7 @@ def fetch_web_frontend_simple():
 
 @app.route('/web_frontend_gmaps', methods=['GET'])
 def fetch_web_frontend_gmaps():
+
     book = capital.Capital()
     result = book.fetch_capitals(None, None)
     countrylist = []
@@ -178,13 +178,78 @@ def fetch_web_frontend_gmaps():
     print encodedUrl
 
     iframe = ""
-    iframe += "<iframe src='"+anotherUrl+"' style='border: 0; width: 100%; height: 100%'></iframe>"
+    iframe += "<iframe src='https://www.google.com/maps/embed/v1/view?center=0%2C0"
+#     iframe += "&markers=color:blue%7Clabel:S%7C40.702147%2C-74.015794"
+    iframe += "&zoom=2"
+    iframe += "&callback=initMap"
+    iframe += "&key=AIzaSyBVx4nNVOa39fcdcXUh40vFaED7NIo7A6Q' style='border: 0; width: 100%; height: 100%'>"
+    
+    iframe += "<script>"
+    iframe += "  function initMap() {"
+    iframe += "    var uluru = {lat: -25.363, lng: 131.044};"
+    iframe += "    var map = new google.maps.Map(document.getElementById('map'), {"
+    iframe += "      zoom: 4,"
+    iframe += "      center: uluru"
+    iframe += "    });"
+    iframe += "    var marker = new google.maps.Marker({"
+    iframe += "      position: uluru,"
+    iframe += "      map: map"
+    iframe += "    });"
+    iframe += "  }"
+    iframe += "</script>"
 
+    iframe += "</iframe>"
     bodyPart += "<body>"
     bodyPart += iframe
     bodyPart += "</body>"
 
     return "<html>"+htmlHeader+"<body>"+bodyPart+"</html>"
+
+@app.route('/map')
+def show_map():
+    book = capital.Capital()
+    page = """
+    <!DOCTYPE html>
+<html>
+  <head>
+    <title>Map of capitals</title>
+    <meta content="text/html; charset="UTF-8">
+    <style>
+       #map {
+        height: 800px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <h3>Map of capitals</h3>
+    <div id="map"></div>
+    <script>
+      function initMap() {
+        var centerLoc = {lat: 29.7604, lng: -95.3698};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: centerLoc
+        });
+        """;
+    for loc in book.get_captial_coords():
+        latlng = 'luru = {lat: ' + str(loc['lat']) + ', lng: '+ str(loc['lng']) +'};'
+        page += latlng
+        page += """
+        var marker = new google.maps.Marker({
+          position: luru,
+          map: map
+        });"""
+
+    page += """
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?callback=initMap">
+    </script>
+  </body>
+</html>"""
+    return page, 200
 
 @app.errorhandler(500)
 def server_error(err):

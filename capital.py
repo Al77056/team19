@@ -107,7 +107,7 @@ class Capital:
         '''
         alldata = self.fetch_allCapitals()
         coords = self._extract_coords(alldata)
-        utility.log_info(coords)
+#         utility.log_info(coords)
         return coords
         
     def _extract_coords(self, country_list):
